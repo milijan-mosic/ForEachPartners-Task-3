@@ -1,5 +1,5 @@
 pgadmin_data
 postgres_data
-venv
+*venv
 *cache*
-*env
+*env*
