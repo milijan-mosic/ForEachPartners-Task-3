@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from settings import views
 
@@ -28,7 +29,23 @@ router.register(r'groups', views.GroupViewSet)
 
 
 urlpatterns = [
+    # ROOT
+    #
     path('', include(router.urls)),
+    # CONTROLS
+    #
     path('admin/', admin.site.urls),
     path('api/', include('rest_framework.urls')),
+    # DOCUMENTATION
+    #
+    path(
+        'api/schema/download',
+        SpectacularAPIView.as_view(),
+        name='schema',
+    ),
+    path(
+        'api/schema/swagger/',
+        SpectacularSwaggerView.as_view(url_name='schema'),
+        name='swagger-ui',
+    ),
 ]

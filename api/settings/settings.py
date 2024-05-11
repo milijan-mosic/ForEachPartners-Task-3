@@ -14,7 +14,9 @@ DEBUG = True
 CSRF_COOKIE_SECURE = True
 CSRF_USE_SESSIONS = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'app.chat.local',
+]
 CSRF_TRUSTED_ORIGINS = [
     'https://app.chat.local',
 ]
@@ -32,6 +34,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #
     'rest_framework',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
     #
 ]
 
@@ -113,6 +117,17 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 12,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+    'TITLE': 'Chat API',
+    'DESCRIPTION': 'Some description here...',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
 }
 
 
