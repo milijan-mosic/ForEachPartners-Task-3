@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  caddy:
+    image: caddy:2.8-alpine
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./caddy/local.Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - chat
+
+  postgres:
+    image: postgres:16.3-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: chat_db
+      PGPORT: 8000
+    ports:
+      - 8000:8000
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - chat
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: always
+    depends_on:
+      - caddy
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@chat.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - chat
+
+  api:
+    image: chat_api:latest
+    restart: always
+    depends_on:
+      - caddy
+      - postgres
+      - pgadmin
+    build:
+      context: api/
+      dockerfile: deployment/local.Dockerfile
+    volumes:
+      - ./api:/code
+    networks:
+      - chat
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  chat:

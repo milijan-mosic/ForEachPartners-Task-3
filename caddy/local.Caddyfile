@@ -1,0 +1,15 @@
+app.chat.local {
+    tls internal
+
+    handle {
+        reverse_proxy api:4000
+    }
+}
+
+pgadmin.chat.local {
+    tls internal
+
+    handle {
+        reverse_proxy pgadmin:80
+    }
+}
